@@ -2,6 +2,7 @@ import tensorflow as tf
 import numpy as np
 import input_data
 import sys
+import os.path
 
 sys.dont_write_bytecode = True
 
@@ -104,8 +105,11 @@ def main():
     train_writer = tf.train.SummaryWriter('log',sess.graph)
     saver = tf.train.Saver()
     sess.run(tf.initialize_all_variables())
+    if (os.path.isfile("tmp/model.ckpt")):
+        saver.restore(sess,"tmp/model.ckpt")
+        print("found model, restored")
 
-    for i in range(100000):
+    for i in range(1000):
         batch = mnist.train.next_batch(50)
         if i%100== 0:
 	    train_accuracy = accuracy.eval(feed_dict={x:batch[0], y: batch[1]})
